@@ -2,7 +2,7 @@
 
 ![CircleCI](https://img.shields.io/circleci/build/gh/gdixon/freo.js/master.svg?style=flat-square&token=49846bd8b00af4f81291462a08949912e7800aa0)
 ![Codecov](https://img.shields.io/codecov/c/github/gdixon/freo.js/master.svg?style=flat-square&token=KVDEN7HWQS)
-![Bundled size](https://img.shields.io/bundlephobia/min/@gdixon/freo/freo.bundle.js?label=bundled&style=flat-square)
+![Bundled size](https://img.badgesize.io/https://unpkg.com/@gdixon/freo/freo.bundle.js?label=bundled&style=flat-square)
 ![NPM Version](https://img.shields.io/npm/v/@gdixon/freo?label=version&style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg?label=license&style=flat-square)
 
