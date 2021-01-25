@@ -1,11 +1,11 @@
 // transpile the builds into es5 compatible versions
-import babel from 'rollup-plugin-babel';
+import babel from '@rollup/plugin-babel';
+
+// allow for external dependencies to rollup with bundle
+import nodeResolve from '@rollup/plugin-node-resolve';
 
 // minify the the builds
 import terser from "rollup-plugin-terser";
-
-// allow for external dependencies to rollup with bundle
-import resolve from 'rollup-plugin-node-resolve';
 
 // browser bundle to include everything
 const iifeBuild = {
@@ -28,7 +28,8 @@ const iifeBuild = {
     },
     plugins: [
         babel({
-            exclude: 'node_modules/**'
+            exclude: 'node_modules/**',
+            babelHelpers: 'bundled'
         }),
         terser.terser()
     ]
@@ -55,7 +56,8 @@ const iifeBuild2 = {
     },
     plugins: [
         babel({
-            exclude: 'node_modules/**'
+            exclude: 'node_modules/**',
+            babelHelpers: 'bundled'
         }),
         terser.terser()
     ]
@@ -82,7 +84,8 @@ const iifeBuild3 = {
     },
     plugins: [
         babel({
-            exclude: 'node_modules/**'
+            exclude: 'node_modules/**',
+            babelHelpers: 'bundled'
         }),
         terser.terser()
     ]
@@ -110,7 +113,8 @@ const iifeBuild4 = {
     },
     plugins: [
         babel({
-            exclude: 'node_modules/**'
+            exclude: 'node_modules/**',
+            babelHelpers: 'bundled'
         }),
         terser.terser()
     ]
@@ -124,9 +128,10 @@ const workerBuild = {
         format: 'iife'
     },
     plugins: [
-        resolve(),
-        babel(),
-        terser.terser()
+        nodeResolve(),
+        babel({
+            babelHelpers: 'bundled'
+        })
     ]
 };
 

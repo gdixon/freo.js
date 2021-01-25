@@ -278,7 +278,7 @@ npm run build
 
 ## License
 
-- This project is licensed under the MIT License - see the [license](https://github.com/gdixon/freo.js/LICENSE.md) file for details
+- This project is licensed under the MIT License - see the [license](https://github.com/gdixon/freo.js/LICENSE) file for details
 
 ## Acknowledgements
 

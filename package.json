@@ -1,6 +1,6 @@
 {
   "name": "@gdixon/freo",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "description": "(F)unctional (Re)active (O)bject Programming library",
   "main": "./index.js",
@@ -49,6 +49,7 @@
   ],
   "author": "GDixon",
   "devDependencies": {
+    "acorn": "^7.0.0",
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
     "@babel/node": "^7.8.7",
@@ -65,9 +66,9 @@
     "mock-raf": "^1.0.1",
     "nodemon": "^2.0.4",
     "nyc": "^15.0.1",
-    "rollup": "^2.10.0",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup": "^2.38.0",
+    "@rollup/plugin-node-resolve": "^11.1.0",
+    "@rollup/plugin-babel": "^5.2.2",
     "rollup-plugin-terser": "^5.3.0",
     "service-worker-mock": "^2.0.5",
     "sinon": "^9.0.2"
