@@ -49,7 +49,7 @@ export class ChangesAdapter extends Adapter {
         // this is the raw subject of the _changes Writable
         this._state = {};
         // feed the state and the options into a new instant
-        this._changes = new Writable(this._state, Object.assign({}, { replaceRoot: true, creationMaxDepth: -1 }, this._options));
+        this._changes = this._options.writableInstance || new Writable(this._state, Object.assign({}, { replaceRoot: true, creationMaxDepth: -1 }, this._options));
     }
 
     _register(target) {
