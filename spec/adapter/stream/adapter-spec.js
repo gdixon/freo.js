@@ -54,7 +54,7 @@ describe("StreamAdapter ~ from ~ freo/adapter/stream", function () {
         return streamable;
     };
 
-    it("should directly pass .notify() calls through the observerable stream", function (done) {
+    it("should directly pass .next() calls through the observerable stream", function (done) {
         // pass state object to the reset so that we can record how the state was changed after the call
         let state = {};
         // proxy done to close the watcher
@@ -130,7 +130,6 @@ describe("StreamAdapter ~ from ~ freo/adapter/stream", function () {
         done();
     });
 
-
     it("should allow the root of the stream to be controlled by the first target StreamAdapter it sees", function (done) {
         // count the number of messages
         let messaged = 0;
@@ -189,8 +188,6 @@ describe("StreamAdapter ~ from ~ freo/adapter/stream", function () {
         // complete test with done
         done();
     });
-
-
 
     it("should allow errors to be pushed through and to stop the stream", function (done) {
         // count the number of messages
@@ -407,7 +404,6 @@ describe("StreamAdapter ~ from ~ freo/adapter/stream", function () {
         done();
     });
 
-
     it("should allow the Stream to be completed via the StreamAdapter", function (done) {
         // count the number of messages
         let messaged = 0;
@@ -536,7 +532,6 @@ describe("StreamAdapter ~ from ~ freo/adapter/stream", function () {
         // complete test with done
         done();
     });
-
 
     it("should allow the Stream to be completed from the Writable without closing the Observable", function (done) {
         // count the number of messages
@@ -708,8 +703,6 @@ describe("StreamAdapter ~ from ~ freo/adapter/stream", function () {
         done();
     });
 
-
-
     it("should allow the Streams to be constructed directly against StreamAdapter via .stream and .factory", function (done) {
         // count the number of messages
         let messaged = 0;
@@ -789,6 +782,32 @@ describe("StreamAdapter ~ from ~ freo/adapter/stream", function () {
         // expect messaged to be incrd
         chai.expect(messaged).to.equal(5);
 
+        // complete test with done
+        done();
+    });
+
+    it("should allow the streamAdapter to be ignorable if .skipStreamAdapter is passed through options", function (done) {
+        // construct a streamable writable
+        const writable = new Writable({
+            "scope": {
+                a: 1
+            }
+        });
+        // start a streamable at known position
+        const streamable = writable.get("scope.a", {
+            adapters: [
+                new StreamAdapter()
+            ]
+        });
+
+        // expect the stream fn to be set
+        chai.expect(typeof streamable.stream).to.equal("function");
+
+        // expect the stream fn to be skipped
+        chai.expect(typeof streamable.get("", {
+            skipStreamAdapter: true
+        }).stream).to.equal("undefined");
+        
         // complete test with done
         done();
     });

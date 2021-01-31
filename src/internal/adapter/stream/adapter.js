@@ -20,17 +20,6 @@ import { Adapter } from "../../adapter.js";
 // Adapter used to construct Streams from key positions on a targeted Readable/Writable instance
 export class StreamAdapter extends Adapter {
 
-    // wonder if we're going to be to be able to do freodb using this too -- I like the idea of a QueryAdapter over a collection like...
-
-    // collection = readable.get({adapters:[new Collection()}); -> sets a collection over the data thats currently held at position? contained inside adapter
-    // collection = writable.get({adapters:[new Collection()}); -> store a collection against the target? set --> put, putArray, query, createIndex, dropIndex
-    // shorthand = writable.get("table").get("#") or writable.get("#table") === writable.get("table", {adapters:[new Collection()});
-    // ** should be able to navigate the collection with fully formed keys through .get like "#table.192339.client.forename"
-
-    // not sure about the query/cursor idea --> we dont need what i've wrote next....
-    // cursor = collection.get({adapters:[new Query(query, skip, limit, sort, maxScan), new Streamable()]}) -> return cursor with .stream and .exec properties?
-    // cursor could also be an adapter? or a Readable or a Writable? 
-
     constructor(key, subjectFactory, bufferSize) {
         // construct the Adapter before assigning key prop
         super();
@@ -56,7 +45,7 @@ export class StreamAdapter extends Adapter {
         // record the first key that we register against if key isnt set yet (this is the root entry position of the Observable)
         if (!this._registered && (this._registered = true) && typeof this._key == "undefined") this._key = target._key;
         // check for a match on the key before attempting the register (* note that completed streams will still be registered)
-        if (target instanceof Readable && (!target._key || matchKey(target._key, this._key).length || matchKey(this._key, target._key).length)) {
+        if ((target instanceof Readable && (!target._key || matchKey(target._key, this._key).length || matchKey(this._key, target._key).length)) && !target._options.skipStreamAdapter) {
             // assign subject - if target is already Streamable then pull Observable from parent
             if (!this._observable) {
                 // collect the parent StreamAdapter instance from the currently appointed instance
@@ -220,7 +209,7 @@ export class StreamAdapter extends Adapter {
     // }
 }
 
-// construct a new Observable (that might a subscriber set against a parent via a ConnectableObservable)
+// construct a new Observable (that might be a subscriber set against a parent via a ConnectableObservable)
 const newObservable = function() {
     // if this._parent is present then we need to register this new Subject onto the parents stream...
     if (!this._parent) {
