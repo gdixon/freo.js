@@ -1,7 +1,7 @@
 // load Fre operators to construct a filtered Subject that only has one Connection to Source
 import { map, filter, shareReplay } from "@gdixon/fre/operator";
 
-// escapement for regexp - using it to clean up the key before removing if we start on a descendent
+// escapement for regExp - using it to clean up the key before removing if we start on a descendent
 import { escapeRegExp } from "./escapeRegExp.js";
 
 // use matchKey from hasDefinition to allow a stream set-up with wildcard entries to emit if a matching keys' value changes 
@@ -106,14 +106,9 @@ export const stream = function (observable, target, keyPrefix, options) {
                 return { parent: carr, target: carr.filters[k], key: k };
             }, observable.observed);
 
-            // should we have options.completeOnDelete here and register it to filtered.completeOnDelete - if delete op propagates for key literal then send complete?
-            // could just be an adapter at this point I reckon)
-
-            // if (returnObserved === true) console.log("RETURN OBSERVABLE", filtered.target, observable)
-
             // return a stream to map to raw & to associate replay behaviour (working like BehaviourSubject)
             return (returnObserved === true ? filtered.target._subject : filtered.target.pipe(
-                // map to the requested form over the stop of the recorded shareReplay filter
+                // map to the requested form over the top of the recorded shareReplay filter
                 map((x) => {
                     // check if we're skipping the clone
                     const skipClone = (target && target._options && target._options.skipClone || target && target._options && target._options.immutable ? true : false);
