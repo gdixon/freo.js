@@ -71,18 +71,15 @@ export class StreamAdapter extends Adapter {
             // record the same action that the sender recorded - dont filter for key matches here because the stream will do it
             switch (message.method) {
             case "undo": case "redo":
-                // push the sets and deletes to the stream (value will always be the raw() value supplied after running undo/redo)
+                // ensure that the message holds a response if forwarding an undo/redo message
                 if (message.response && message.response[(message.method == "undo" ? "redo" : "undo")]) {
                     // forward the message data through the roots observable
-                    this._observable.next({ method: message.method, key: message.key, value: message.value, sender: message.sender });
+                    this._observable.next(message);
                 }
                 break;
-            case "set": case "delete":
-                // push the sets and deletes to the stream
-                // if (message.response) {
+            default:
                 // forward the message data through the roots observable
-                this._observable.next({ method: message.method, key: message.key, value: message.value, sender: message.sender });
-                // }
+                this._observable.next(message);
 
                 break;
             }
