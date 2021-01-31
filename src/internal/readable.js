@@ -88,7 +88,7 @@ export class Readable extends Preparable {
                 const raw = this.raw(true);
 
                 // return type of !object and known objects - everything else is object
-                return (typeof raw !== "object" ? typeof raw : (
+                return (this.type ? this.type : (typeof raw !== "object" ? typeof raw : (
                     raw.type ? raw.type : (
                         raw instanceof ArrayBuffer ? "arrayBuffer" : (
                             raw instanceof Date ? "date" : (
@@ -96,7 +96,7 @@ export class Readable extends Preparable {
                             )
                         )
                     )
-                )).valueOf();
+                ))).valueOf();
             }
         });
         // initiate the object - this step allows extenders to modify state before register

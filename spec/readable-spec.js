@@ -458,6 +458,12 @@ describe("Readable ~ from ~ freo", function () {
     });
 
     it("should respond with typeof", function (done) {
+        // create an instance with an overide type
+        const typed = new Readable([1, 2, 3]);
+        // force a type on to the instance
+        typed.type = "test";
+        // expect typeof to reflect the type property of the readable
+        chai.expect(typed.typeof == "test").to.equal(true);
         // expect loose equality typeof checks
         chai.expect((new Readable([1, 2, 3])).typeof == "array").to.equal(true);
         chai.expect((new Readable({ a: 1 })).typeof == "object").to.equal(true);
