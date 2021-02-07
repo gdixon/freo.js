@@ -1,6 +1,6 @@
 {
   "name": "@gdixon/freo",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "MIT",
   "description": "(F)unctional (Re)active (O)bject Programming library",
   "main": "./index.js",
@@ -21,6 +21,7 @@
     "es5",
     "es2015",
     "internal",
+    "adapter",
     "utility",
     "freo.adapter.bundle.js",
     "freo.bundle.js",

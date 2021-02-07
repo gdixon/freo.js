@@ -1,3 +1,6 @@
+// Base Adapter class - create new instances passing in register, message and error to produce light weight Adapters
+export { Adapter } from "./internal/adapter.js";
+
 // Adaptable registers Adapters before calling back
 // - Adaptable accepts [parent, adapters, ready-state, and a callback to call after registering Adapters]
 // - if ready!=false .register is called with provided callback on init (chained to parents .onReady if parent is a Preparable (duck-typed))

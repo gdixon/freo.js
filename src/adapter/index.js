@@ -1,7 +1,4 @@
 
-// Base Adapter class - create new instances passing in register, message and error to produce light weight Adapters
-export { Adapter } from "../internal/adapter.js";
-
 // exports an Adapter to watch for error events
 export { ErrorAdapter } from "../internal/adapter/error/adapter.js";
 
