@@ -175,7 +175,6 @@ Utilising Writable, Sync (a singleton constructed from the SyncAdapter) and Stre
 
 ### <a name="freo"></a>@gdixon/freo
 
-- Adapter
 - Adaptable
 - Preparable
 - Readable
@@ -219,6 +218,7 @@ Utilising Writable, Sync (a singleton constructed from the SyncAdapter) and Stre
 
 ### <a name="extension"></a>@gdixon/freo/adapter
 
+- Adapter
 - CacheAdapter
 - ChangesAdapter
 - ErrorAdapter
