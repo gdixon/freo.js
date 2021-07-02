@@ -14,7 +14,7 @@ export const hasDefinition = function (obj, key, options) {
     // default to a type definition check
     options.definition = options.definition || "_type";
     // default to dot delimination
-    options.deliminator = options.deliminator || ".";
+    options.delimiter = options.delimiter || ".";
     // collect matching recursion keys - remove them from keyPrefix if we recurse again - resetting each wildcard restart
     options.collected = options.collected || [];
     // default the working keyPrefix to empty string so we can build it up as we move through the keys
@@ -22,7 +22,7 @@ export const hasDefinition = function (obj, key, options) {
     // mutable collections of each position we accessed along the trie object
     const accessList = options.accessList || {};
     // keep track of all keys, weights and definitions discovered in this and subsequent recursions feeding back to parent
-    const keys = [], weights = [], defintions = {};
+    const keys = [], weights = [], definitions = {};
     // if the key directly points at value...
     if (obj && (!key && obj[options.definition] && !keyPrefix)) {
         // default the working key
@@ -36,10 +36,10 @@ export const hasDefinition = function (obj, key, options) {
         // record the access position
         accessList[keyPrefix] = obj;
         // record the definition as fn
-        defintions[keyPrefix] = obj[options.definition].fn;
+        definitions[keyPrefix] = (options.returnObj || !obj[options.definition].fn ? obj[options.definition] : obj[options.definition].fn);
     } else if (obj && obj.constructor === Object && key) {
         // when the root of this attempt points to obj - retrieve the full requested key as an array
-        const workingKey = toArray(key, options.deliminator);
+        const workingKey = toArray(key, options.delimiter);
         // iterate key collection moving to next position each turn
         while (typeof obj !== "undefined" && workingKey && workingKey.length > 0) {
             // if we're in recursion mode the next key must be given (not a wildcard)
@@ -49,21 +49,21 @@ export const hasDefinition = function (obj, key, options) {
                 // if we use Map we can use has and get only (because of IE)
                 if (typeof obj["*"] !== "undefined") {
                     // recurse on the relevent element (key must be present at * position)
-                    recurse(workingKey, obj, "*", keyPrefix, accessList, keys, weights, defintions, true, Object.assign({}, options));
+                    recurse(workingKey, obj, "*", keyPrefix, accessList, keys, weights, definitions, true, Object.assign({}, options));
                 }
-                // check if the defintions has a loose match present at nested position for key (closes gap between lhs and keys after the ** (** can cover any number of segments))
+                // check if the definitions has a loose match present at nested position for key (closes gap between lhs and keys after the ** (** can cover any number of segments))
                 if (typeof obj["**"] !== "undefined") {
                     // initiate a recursive check -- tracks the position from **
-                    recurse(workingKey, obj, "**", keyPrefix, accessList, keys, weights, defintions, true, Object.assign({}, options));
+                    recurse(workingKey, obj, "**", keyPrefix, accessList, keys, weights, definitions, true, Object.assign({}, options));
                 }
-                // check if the defintions has a loose match present at nested position for key (closes gap between lhs and keys after the ** (** can cover any number of segments))
+                // check if the definitions has a loose match present at nested position for key (closes gap between lhs and keys after the ** (** can cover any number of segments))
                 if (typeof obj["***"] !== "undefined") {
                     // pull each of the defined options at this stage (stored as "a|b"=>_type)
                     Object.keys(obj["***"]).forEach((k) => {
                         // split the options and check if the next workingKey fits
                         if (k.split("|").indexOf(workingKey[0]) !== -1) {
                             // recurse on the relevent element (option must be present at workingKey position)
-                            recurse(workingKey, obj["***"], k, keyPrefix, accessList, keys, weights, defintions, true, Object.assign({}, options));
+                            recurse(workingKey, obj["***"], k, keyPrefix, accessList, keys, weights, definitions, true, Object.assign({}, options));
                         }
                     });
                 }
@@ -72,18 +72,18 @@ export const hasDefinition = function (obj, key, options) {
                     // clean the collected from the keyPrefix
                     if (options.collected.length && typeof obj[workingKey[0]] === "undefined") {
                         // remove the collected items from the keyPrefix on mismatch
-                        keyPrefix = keyPrefix.replace(new RegExp(escapeRegExp(options.deliminator) + "?" + escapeRegExp(options.collected.join(options.deliminator)) + "$"), "");
+                        keyPrefix = keyPrefix.replace(new RegExp(escapeRegExp(options.delimiter) + "?" + escapeRegExp(options.collected.join(options.delimiter)) + "$"), "");
                         // clear the collected items and start again on this recursion
                         options.collected = [];
                     }
                     // move along the same item - check to see if the key matches by shifting and ckecking again
-                    recurse(workingKey, options.parent, options.parentKey, keyPrefix, accessList, keys, weights, defintions, false, Object.assign({}, options));
+                    recurse(workingKey, options.parent, options.parentKey, keyPrefix, accessList, keys, weights, definitions, false, Object.assign({}, options));
                 }
             }
             // drop the k from workingKey for next iteration
             const k = workingKey.shift();
             // default the working key
-            keyPrefix = keyPrefix.toString() + (keyPrefix.toString() ? options.deliminator : "") + k;
+            keyPrefix = keyPrefix.toString() + (keyPrefix.toString() ? options.delimiter : "") + k;
             // key matches single item at this position - move to it or undf on missing
             if (typeof obj[k] !== "undefined") {
                 // move to that object
@@ -103,10 +103,10 @@ export const hasDefinition = function (obj, key, options) {
             if (typeof obj[options.definition].weight == "undefined") obj[options.definition].weight = constructWeight(keyPrefix, options);
             // record the final if it holds a value
             keys.push(keyPrefix);
-            // record the defintions weight
+            // record the definitions weight
             weights.push(obj[options.definition].weight);
             // final obj as type
-            defintions[keyPrefix] = obj[options.definition].fn;
+            definitions[keyPrefix] = (obj[options.definition].fn ? obj[options.definition].fn : obj[options.definition]);
         }
     }
 
@@ -118,8 +118,8 @@ export const hasDefinition = function (obj, key, options) {
         keys: (!options.skipSort ? Object.keys(keys).sort((a, b) => sortByWeight(weights[a], weights[b])).reduce((carr, k) => (carr.push(keys[k]) && carr), []) : keys),
         // sort the weights with the same algorithm
         weights: (!options.skipSort ? weights.sort((a, b) => sortByWeight(a, b)) : weights),
-        // return the defintions as a flat obj of matching keys
-        defintions: defintions,
+        // return the definitions as a flat obj of matching keys
+        definitions: definitions,
         // get arguments for the key entry - allow for entry to be skipped to avoid leaks if using an immutable definition structure
         ...(!options.skipArgs ? {
             // calling to args with a matching definition key (keys item) will retrive an array of matching elements corresponding to the input key
@@ -131,8 +131,8 @@ export const hasDefinition = function (obj, key, options) {
                     return matchKey((key && key.toString ? key.toString() : ""), definitionKey, {
                         // marking exact match forces forwardlookup on greedys and makes sure all props are set before return a match
                         exactMatch: true,
-                        // pass through the assigned deliminator
-                        deliminator: options.deliminator
+                        // pass through the assigned delimiter
+                        delimiter: options.delimiter
                     });
                 }
 
@@ -144,7 +144,7 @@ export const hasDefinition = function (obj, key, options) {
 };
 
 // recursively match against wildcarded entrants (** and *)
-const recurse = function (workingKey, obj, key, keyPrefix, accessList, keys, weights, defintions, startNew, options) {
+const recurse = function (workingKey, obj, key, keyPrefix, accessList, keys, weights, definitions, startNew, options) {
     // shallow copy of the arr so shift doesnt drop from original
     const arrKeys = workingKey.concat();
     // check if this and future calls should be treat as recursions
@@ -152,13 +152,13 @@ const recurse = function (workingKey, obj, key, keyPrefix, accessList, keys, wei
     // we want to ignore the ** as a placeholding so { a.**.b } can match { a.b } - at all other times we want to move to the next key
     if (key !== "**" || recursive) arrKeys.shift();
     // attach to the prefix if required (whenever we're not recursing)
-    if (!recursive) keyPrefix = keyPrefix + (keyPrefix ? options.deliminator : "") + key;
-    // collect matches recursively from nested position in the defintion obj (this moves another branch deeper and runs the full check again)
+    if (!recursive) keyPrefix = keyPrefix + (keyPrefix ? options.delimiter : "") + key;
+    // collect matches recursively from nested position in the definition obj (this moves another branch deeper and runs the full check again)
     const response = hasDefinition(obj[key], arrKeys, {
-        // feed the defintion attr through
+        // feed the definition attr through
         definition: options.definition,
-        // feed the deliminator attr through
-        deliminator: options.deliminator,
+        // feed the delimiter attr through
+        delimiter: options.delimiter,
         // restore collected from last tick or start fresh
         collected: (!startNew ? options.collected.concat() : []),
         // mark the next layer as recursive
@@ -186,8 +186,8 @@ const recurse = function (workingKey, obj, key, keyPrefix, accessList, keys, wei
             weights.push(response.weights[k]);
         }
     });
-    // combine discovered defintions from the recursion response into the parents definitions - mutable merge left
-    Object.assign(defintions, response.defintions);
+    // combine discovered definitions from the recursion response into the parents definitions - mutable merge left
+    Object.assign(definitions, response.definitions);
 };
 
 // construct a weight to guide positioning - we want to match from left to right given precedence to values which more correctly fit the position
@@ -211,7 +211,7 @@ const recurse = function (workingKey, obj, key, keyPrefix, accessList, keys, wei
 const constructWeight = function (key, options) {
     // could also go dumb and just do longest match?? most given parts wins?
     // produce an array of segments from the key
-    const segments = toArray(key, (options && options.deliminator));
+    const segments = toArray(key, (options && options.delimiter));
     // negate if entry contains a greedy wildcard (**) in any position - after completing the full weight calc as a pos
     const greedy = segments.indexOf("**") !== -1;
     // record segLen because we use it every val

@@ -467,7 +467,7 @@ describe("setValueAt ~ from ~ freo/utility", function () {
         done();
     });
 
-    it("should immutably set values given object and key that points to items using wildcard and an options defintion", function (done) {
+    it("should immutably set values given object and key that points to items using wildcard and an options definition", function (done) {
         // get this key
         const key = "a.*.b.0|1.c.0.d";
         // object to insert
@@ -495,7 +495,7 @@ describe("setValueAt ~ from ~ freo/utility", function () {
         done();
     });
 
-    it("should mutably set values given object and key that points to items using wildcard and an options defintion", function (done) {
+    it("should mutably set values given object and key that points to items using wildcard and an options definition", function (done) {
         // get this key
         const key = "a.*.b.0|1.c.0.d";
         // object to insert
@@ -521,7 +521,7 @@ describe("setValueAt ~ from ~ freo/utility", function () {
         done();
     });
 
-    it("should immutably set values given object and key that points to items using an options defintion at root", function (done) {
+    it("should immutably set values given object and key that points to items using an options definition at root", function (done) {
         // get this key
         const key = "a|b";
         // object to insert
@@ -548,7 +548,7 @@ describe("setValueAt ~ from ~ freo/utility", function () {
         done();
     });
 
-    it("should mutably set values given object and key that points to items using an options defintion at root", function (done) {
+    it("should mutably set values given object and key that points to items using an options definition at root", function (done) {
         // get this key
         const key = "a|b";
         // object to insert
@@ -854,7 +854,7 @@ describe("setValueAt ~ from ~ freo/utility", function () {
         const response1 = setValueAt((obj = 1), key, "2", {
             // mark as typesafe
             typesafe: true,
-            // feed a root level type defintion
+            // feed a root level type definition
             types: {
                 _type: {
                     fn: castInteger
@@ -867,7 +867,7 @@ describe("setValueAt ~ from ~ freo/utility", function () {
         const response2 = setValueAt((obj = {}), key, {a:"2"}, {
             // mark as typesafe
             typesafe: true,
-            // feed a root level type defintion
+            // feed a root level type definition
             types: {
                 a: {
                     _type: {
@@ -900,9 +900,9 @@ describe("setValueAt ~ from ~ freo/utility", function () {
             typesafe: true,
             // mark that we're setting a type (this instructs internals to report errors correctly)
             asDefinition: true,
-            // setting the _type defintion at prop
+            // setting the _type definition at prop
             definition: "_type",
-            // feed a root level type defintion to typeCast an obj of types
+            // feed a root level type definition to typeCast an obj of types
             types: {
                 _type: {
                     fn: (type) => (type && type._type && typeof type._type.fn == "function" ? type : undefined)
@@ -927,7 +927,7 @@ describe("setValueAt ~ from ~ freo/utility", function () {
             typesafe: true,
             // mark that we're setting a type (this instructs internals to report errors correctly)
             asDefinition: true,
-            // setting the _type defintion at prop
+            // setting the _type definition at prop
             definition: "_type",
             // catch errors from attempting to set a type
             error: (err) => {
@@ -936,7 +936,7 @@ describe("setValueAt ~ from ~ freo/utility", function () {
                 // mark that we errored
                 errored = true;
             },
-            // feed a root level type defintion
+            // feed a root level type definition
             types: {
                 _type: {
                     fn: (type) => (type && type._type && typeof type._type.fn == "function" ? type : undefined)
@@ -957,7 +957,7 @@ describe("setValueAt ~ from ~ freo/utility", function () {
             typesafe: true,
             // mark that we're setting a type (this instructs internals to report errors correctly)
             asDefinition: true,
-            // setting the _type defintion at prop
+            // setting the _type definition at prop
             definition: "_type",
             // skipp the message should stop errors being sent
             skipMessage: {src: "test"},
@@ -968,7 +968,7 @@ describe("setValueAt ~ from ~ freo/utility", function () {
                 // mark that we errored
                 errored = true;
             },
-            // feed a root level type defintion
+            // feed a root level type definition
             types: {
                 _type: {
                     fn: (type) => (type && type._type && typeof type._type.fn == "function" ? type : undefined)
@@ -1001,9 +1001,9 @@ describe("setValueAt ~ from ~ freo/utility", function () {
             typesafe: true,
             // mark that we're setting a type (this instructs internals to report errors correctly)
             asDefinition: true,
-            // setting the _type defintion at prop
+            // setting the _type definition at prop
             definition: "_type",
-            // feed a root level type defintion to typeCast an obj of types
+            // feed a root level type definition to typeCast an obj of types
             types: {
                 _type: {
                     fn: (type) => (type && type._type && typeof type._type.fn == "function" ? type : undefined)

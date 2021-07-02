@@ -10,7 +10,7 @@ import { merge } from "./merge.js";
 // check that the final leaf is altered before carrying out set
 import { equal } from "./equal.js";
 
-// check the types defintion for most appropriate type for the given key (will match with arr index missing)
+// check the types definition for most appropriate type for the given key (will match with arr index missing)
 import { hasDefinition } from "./hasDefinition.js";
 
 // import valueAt method to get to the values contained
@@ -26,7 +26,8 @@ import { prepareMeta } from "./prepareMeta.js";
 // -- typesafe - use the types to lock type safety
 // -- definition - mark the position of the definition being set
 // -- asDefinition - mark that we're setting a type to disable the use of Arrays and to report errors considerately
-// -- disableWildcard - disable the use of wildcards allowing * and ** to be set as properties on the response
+// -- disableWildcard - disable the use of wildcards allowing * and ** to be set as a literal property name
+// -- disableOptions - disable the use of options allowing | to be set within a property name
 // -- creationMaxDepth - set how deep new entries should be written if the source doesnt match key expectations (*note - not valid for wildcard entrants)
 // -- written - record the final branches that were set in the operation (mutable collection fed by reference (impure))
 // -- dropped - record the old value of each branch we replace (mutable collection fed by reference (impure))
@@ -204,17 +205,17 @@ const typeCheckValue = function (key, value, written, options) {
         // attempt to typeCast the provided value using assigned method
         try {
             // cast the value using the given type method (first in list of matching types)
-            casted = (typeCastDefinition || cast.defintions[cast.keys[0]])(value);
+            casted = (typeCastDefinition || cast.definitions[cast.keys[0]])(value);
             // if the casting didnt throw then check that the value was cast correctly - if undefined was returned then record a TypeError
             if (typeof casted == "undefined" && typeof options.error == "function") {
                 // construct a typeError describing the issue
                 const err = new TypeError(key + (asType ? "." + options.definition : "") + " cannot be set to " + attempted);
                 // throw through the given error handler
-                options.error(err, {err: err, value: attempted, type: typeCastDefinition || cast && cast.keys && cast.defintions[cast.keys[0]], ...details});
+                options.error(err, {err: err, value: attempted, type: typeCastDefinition || cast && cast.keys && cast.definitions[cast.keys[0]], ...details});
             }
         } catch (err) {
             // throw the error through to the assigned handler
-            if (typeof options.error == "function") options.error(err, {err: err, value: attempted, type: typeCastDefinition || cast && cast.keys && cast.defintions[cast.keys[0]], ...details});
+            if (typeof options.error == "function") options.error(err, {err: err, value: attempted, type: typeCastDefinition || cast && cast.keys && cast.definitions[cast.keys[0]], ...details});
         } finally {
             // always move to the casted value (even undefined)
             value = casted;

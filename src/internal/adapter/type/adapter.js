@@ -21,7 +21,7 @@ export class TypeAdapter extends Writable {
         this._options._set = {
             // combine orignals and extend...
             ...this._options._set, ...{
-                // stop setValue at from following * defintions instead assigning them all to objects
+                // stop setValue at from following * definitions instead assigning them all to objects
                 disableWildcard: true,
                 // if the type is being set...
                 asDefinition: true,
@@ -47,7 +47,7 @@ export class TypeAdapter extends Writable {
         this._options._raw = {
             // combine orignals and extend...
             ...this._options._raw, ...{
-                // stop setValue at from following * defintions instead assigning them all to objects
+                // stop setValue at from following * definitions instead assigning them all to objects
                 disableWildcard: true,
                 // mark that we're getting a definition
                 asDefinition: true,

@@ -47,20 +47,20 @@ describe("matchKey ~ from ~ freo/utility", function () {
         done();
     });
 
-    it("should matchKeys() given a key and a uri and a defined deliminator", function (done) {
-        // with deliminator
-        chai.expect(matchKey("a/b", "a/a|b", { deliminator: "/" })).to.eql(["a", "b"]);
-        chai.expect(matchKey("a/b", "a/*", { deliminator: "/" })).to.eql(["a", "b"]);
-        chai.expect(matchKey("a/b", "a/**", { deliminator: "/" })).to.eql(["a", "b"]);
-        chai.expect(matchKey("a/b", "a/b", { deliminator: "/" })).to.eql(["a", "b"]);
-        chai.expect(matchKey("a", "a/**", { deliminator: "/" })).to.eql(["a", undefined]);
-        chai.expect(matchKey("a/b", "a/**/b", { deliminator: "/" })).to.eql(["a", undefined, "b"]);
+    it("should matchKeys() given a key and a uri and a defined delimiter", function (done) {
+        // with delimiter
+        chai.expect(matchKey("a/b", "a/a|b", { delimiter: "/" })).to.eql(["a", "b"]);
+        chai.expect(matchKey("a/b", "a/*", { delimiter: "/" })).to.eql(["a", "b"]);
+        chai.expect(matchKey("a/b", "a/**", { delimiter: "/" })).to.eql(["a", "b"]);
+        chai.expect(matchKey("a/b", "a/b", { delimiter: "/" })).to.eql(["a", "b"]);
+        chai.expect(matchKey("a", "a/**", { delimiter: "/" })).to.eql(["a", undefined]);
+        chai.expect(matchKey("a/b", "a/**/b", { delimiter: "/" })).to.eql(["a", undefined, "b"]);
             
         done();
     });
 
-    it("should matchKeys() as literals if the deliminator doesnt match the keys deliminator", function (done) {
-        // without deliminator
+    it("should matchKeys() as literals if the delimiter doesnt match the keys delimiter", function (done) {
+        // without delimiter
         chai.expect(matchKey("a/b", "a/a|b")).to.eql([]);
         chai.expect(matchKey("a/b", "a/*")).to.eql([]);
         chai.expect(matchKey("a/b", "a/**")).to.eql([]);
@@ -71,30 +71,30 @@ describe("matchKey ~ from ~ freo/utility", function () {
     });
 
     it("should allow matches on greedy placeholders to be optional (if the next immediate segment matches)", function (done) {
-        // console.log(matchKey("a/b/c/d/e/f/g", "a/b/**/c/**/f/**/*", { deliminator: "/" }));
+        // console.log(matchKey("a/b/c/d/e/f/g", "a/b/**/c/**/f/**/*", { delimiter: "/" }));
         // any splat may be optional...
-        chai.expect(matchKey("a/b/c/d/e/f/g", "a/b/**/c/**/f/**/g", { deliminator: "/" })).to.eql(["a", "b", undefined, "c", "d/e", "f", undefined, "g"]);
-        chai.expect(matchKey("a/b/c/d/e/f/g", "a/b/**/c/**/f/**/*", { deliminator: "/" })).to.eql(["a", "b", undefined, "c", "d/e", "f", "g", undefined]);
-        chai.expect(matchKey("a/b/c/d/e/f/g", "a/b/**/c/**/f/**/*/*", { deliminator: "/" })).to.eql(["a", "b", undefined, "c", "d/e", "f", "g", undefined, undefined]);
-        chai.expect(matchKey("a/b/c/d/e/f/g", "a/b/**/c/**/f/**/g/*", { deliminator: "/" })).to.eql(["a", "b", undefined, "c", "d/e", "f", undefined, "g", undefined]);
-        chai.expect(matchKey("a/b/c/d/e/f/g", "a/b/**/c/**/f/**/**/*", { deliminator: "/" })).to.eql(["a", "b", undefined, "c", "d/e", "f", "g", undefined, undefined]);
+        chai.expect(matchKey("a/b/c/d/e/f/g", "a/b/**/c/**/f/**/g", { delimiter: "/" })).to.eql(["a", "b", undefined, "c", "d/e", "f", undefined, "g"]);
+        chai.expect(matchKey("a/b/c/d/e/f/g", "a/b/**/c/**/f/**/*", { delimiter: "/" })).to.eql(["a", "b", undefined, "c", "d/e", "f", "g", undefined]);
+        chai.expect(matchKey("a/b/c/d/e/f/g", "a/b/**/c/**/f/**/*/*", { delimiter: "/" })).to.eql(["a", "b", undefined, "c", "d/e", "f", "g", undefined, undefined]);
+        chai.expect(matchKey("a/b/c/d/e/f/g", "a/b/**/c/**/f/**/g/*", { delimiter: "/" })).to.eql(["a", "b", undefined, "c", "d/e", "f", undefined, "g", undefined]);
+        chai.expect(matchKey("a/b/c/d/e/f/g", "a/b/**/c/**/f/**/**/*", { delimiter: "/" })).to.eql(["a", "b", undefined, "c", "d/e", "f", "g", undefined, undefined]);
         // we might change this behaviour later to absorb all the splats before a literal next match which would give us ["a", "b", undefined, "c", "d/e", "f", undefined, undefined, "g", undefined]
-        chai.expect(matchKey("a/b/c/d/e/f/g", "a/b/**/c/**/f/**/**/g/*", { deliminator: "/" })).to.eql(["a", "b", undefined, "c", "d/e", "f", "g", undefined, undefined, undefined]);
+        chai.expect(matchKey("a/b/c/d/e/f/g", "a/b/**/c/**/f/**/**/g/*", { delimiter: "/" })).to.eql(["a", "b", undefined, "c", "d/e", "f", "g", undefined, undefined, undefined]);
     
         done();
     });
 
     it("should allow for greedys to defer matching on first next match if we know a later entry will match better...", function (done) {
         // without checking for an exactMatch we would stop feeding the greedy on the first "f"
-        chai.expect(matchKey("4/10/s/d/h/e/f/a/c/d/e/f", "4/**/f", {deliminator: "/"})).to.eql(["4", "10/s/d/h/e", "f"]);
+        chai.expect(matchKey("4/10/s/d/h/e/f/a/c/d/e/f", "4/**/f", {delimiter: "/"})).to.eql(["4", "10/s/d/h/e", "f"]);
         // checking for an exactMatch should forward that first f match for later
-        chai.expect(matchKey("4/10/s/d/h/e/f/a/c/d/e/f", "4/**/f", {exactMatch: true, deliminator: "/"})).to.eql(["4", "10/s/d/h/e/f/a/c/d/e", "f"]);
+        chai.expect(matchKey("4/10/s/d/h/e/f/a/c/d/e/f", "4/**/f", {exactMatch: true, delimiter: "/"})).to.eql(["4", "10/s/d/h/e/f/a/c/d/e", "f"]);
         // however if we do that and no "f" is present later - everything is absorbed to the greedy and we end up with an undf and not an exactMatch...
-        chai.expect(matchKey("4/10/s/d/h/e/f/a/c/d/e/h", "4/**/f", {exactMatch: true, deliminator: "/"})).to.eql([]);
+        chai.expect(matchKey("4/10/s/d/h/e/f/a/c/d/e/h", "4/**/f", {exactMatch: true, delimiter: "/"})).to.eql([]);
         // we can also do the same using forwardGreedyLookup...
-        chai.expect(matchKey("4/10/s/d/h/e/f/a/c/d/e/f", "4/**/f", {forwardGreedyLookup: true, deliminator: "/"})).to.eql(["4", "10/s/d/h/e/f/a/c/d/e", "f"]);
+        chai.expect(matchKey("4/10/s/d/h/e/f/a/c/d/e/f", "4/**/f", {forwardGreedyLookup: true, delimiter: "/"})).to.eql(["4", "10/s/d/h/e/f/a/c/d/e", "f"]);
         // the difference is that if the match fails later it will still return the positions that lead us here (with everything else on the last greey)
-        chai.expect(matchKey("4/10/s/d/h/e/f/a/c/d/e/h", "4/**/f", {forwardGreedyLookup: true, deliminator: "/"})).to.eql(["4", "10/s/d/h/e/f/a/c/d/e/h", undefined]);
+        chai.expect(matchKey("4/10/s/d/h/e/f/a/c/d/e/h", "4/**/f", {forwardGreedyLookup: true, delimiter: "/"})).to.eql(["4", "10/s/d/h/e/f/a/c/d/e/h", undefined]);
 
         done();
     });

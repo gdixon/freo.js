@@ -373,7 +373,7 @@ describe("SyncAdapter ~ from ~ freo/extension", function () {
     it("should report on failed attempts and let them slip through (navigator undefined)", function (done) {
         // clear mocks
         cleanState();
-        // load the window defintions
+        // load the window definitions
         prepareWindow();
         // assign workerReady on build
         let workerReady = false;

@@ -16,7 +16,7 @@ export { isConstructor } from "../internal/utility/isConstructor.js";
 // escape any special chars before feeding through regExp
 export { escapeRegExp } from "../internal/utility/escapeRegExp.js";
 
-// string/array of keys to array of keys broken at deliminator
+// string/array of keys to array of keys broken at delimiter
 export { toArray } from "../internal/utility/toArray.js";
 
 // check the validity of a key against a {wildcard} uri *note - both sides could be literal and the left can be longer/shorter (if returnMatches=true)

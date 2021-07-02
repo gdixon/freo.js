@@ -5,7 +5,7 @@
 // - if exactMatch is false then the key doesnt have to be an exact match, it can be either too long or too short, or partially wrong
 // - if the key is partially wrong it must be from the right hand side ("a.b.c.d" ~ "a.b.c.e" == ['a','b','c',undefined])
 // - any missing entries will be passed back in pos as undefined (the lhs must be defined for the rhs to be defined)
-// - the responses length will always equal the defString.split(deliminator).length unless exactMatch is true and the key doesnt match
+// - the responses length will always equal the defString.split(delimiter).length unless exactMatch is true and the key doesnt match
 
 // -- this key parsing mechanism works equivalently to valueAt and hasDefinition but each works over a different source
 // --- matchKey is working a string key against a uri key to discover arguments
@@ -14,7 +14,7 @@
 
 // console.time("time");
 // console.log(
-//     matchKey("a.b.d.c.d.f.f.v", "a.b.d.**.*.**.d.s", {deliminator: "."}), // ["a", "b", "d", "c.d.f", "f", "v", undefined, undefined]
+//     matchKey("a.b.d.c.d.f.f.v", "a.b.d.**.*.**.d.s", {delimiter: "."}), // ["a", "b", "d", "c.d.f", "f", "v", undefined, undefined]
 //     matchKey("a.b.d.c.d.f.d.s", "a.b.d.**.*.d.s"), // ["a", "b", "d", "c.d", "f", "d", "s"]
 //     matchKey("a.b.d.c.d.f.d.s", "a.b.d.**.*.**.s"), // ["a", "b", "d", "c.d", "f", "d", "s"]
 //     matchKey("a.b.d.c.d.f.d.d.d.s", "a.b.d.**.*.**.d.s"), // ["a", "b", "d", "c", "d", "f", "d", undefined]
@@ -27,28 +27,28 @@
 // - options
 // -- exactMatch
 // -- forwardGreedyLookup
-// -- deliminator
+// -- delimiter
 
 // work through a key and check for matches - return an array of each position that did match (allows for **, * and a|a)
 export const matchKey = function (key, defString, options) {
     // construct options if ommited
     options = options || {};
-    // default the deliminator
-    options.deliminator = (options.deliminator ? options.deliminator : ".");
+    // default the delimiter
+    options.delimiter = (options.delimiter ? options.delimiter : ".");
     // check for full match of the defString on key to avoid needing to do a thorough check on literal matching strings
     if (options.exactMatch && key === defString) {
 
         // establish array from keys
-        return key.split(options.deliminator);
+        return key.split(options.delimiter);
     } else if (!options.exactMatch && key.indexOf(defString) == 0) {
 
         // establish array from defString
-        return defString.split(options.deliminator);
+        return defString.split(options.delimiter);
     } else {
         // pointer as we move through the segs and res were we place the keys on discovery
         let pos = 0, res = [];
         // pull the keys and the segs from the provided strings
-        const keys = key.split(options.deliminator), segs = defString.split(options.deliminator);
+        const keys = key.split(options.delimiter), segs = defString.split(options.delimiter);
         // check each segment individually
         while (pos < segs.length && keys.length) {
             // special case for greedy
@@ -137,7 +137,7 @@ const greedy = (pos, keys, segs, res, options) => {
             // - this should be used when you know the final key should match final segs and matches in the middle should be ignored
             if ((options.exactMatch || options.forwardGreedyLookup) && pass && keys.length) {
                 // check if the rest of the string matches
-                const matches = matchKey(keys.join(options.deliminator), segs.slice(pos, segs.length).join(options.deliminator), options);
+                const matches = matchKey(keys.join(options.delimiter), segs.slice(pos, segs.length).join(options.delimiter), options);
                 // if the match failed then consume the next key and try to match the rest again
                 if (!matches.length || (options.forwardGreedyLookup && keys.length > segs.length-pos)) pass = false, consumed.push(keys.shift());
             }
@@ -153,7 +153,7 @@ const greedy = (pos, keys, segs, res, options) => {
             (res[initialPos] ? res[initialPos] : (res[initialPos] = [])).push(consumed.shift());
         }
         // join the res[initialPos] we just filled to create one delminated entry
-        res[initialPos] = res[initialPos].join(options.deliminator);
+        res[initialPos] = res[initialPos].join(options.delimiter);
         // spread the rest of the items out for each * or ** entry after the greedy
         consumed.forEach((v, key) => (res[initialPos + key + 1] = v));
     }

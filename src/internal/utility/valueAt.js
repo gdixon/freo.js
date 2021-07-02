@@ -31,7 +31,7 @@ export const valueAt = function (obj, key, keyPrefix, depth, options, recursive,
             // get recursion key (which might be the next key)
             const recurseKey = (childKey === "**" ? keys[0] : childKey);
             // check if the childKey might point to a set of options (a|b|c)
-            const checkOptions = (!gettingOption && (childKey.indexOf("|") !== -1 || (recursive && recurseKey && recurseKey.indexOf("|") !== -1)));
+            const checkOptions = (!options.disableOptions && !gettingOption && (childKey.indexOf("|") !== -1 || (recursive && recurseKey && recurseKey.indexOf("|") !== -1)));
             // check for recursion match...
             const checkRecursive = (recursive && (working[recurseKey] == null || typeof working[recurseKey] === "undefined") && (Object.keys(working).length || keys.length));
             // if we're in recursion mode the next key must be given (not a wildcard)

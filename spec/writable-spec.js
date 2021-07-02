@@ -523,7 +523,7 @@ describe("Writable ~ from ~ freo", function () {
         done();
     });
 
-    // it("should allow type defintions to be set on the Writable instance and to be enforced", function (done) {
+    // it("should allow type definitions to be set on the Writable instance and to be enforced", function (done) {
     //     // root obj 
     //     const obj = {};
     //     // create a new instance...
@@ -543,7 +543,7 @@ describe("Writable ~ from ~ freo", function () {
     //     done();
     // });
 
-    // it("should allow type defintions to be set on nested positions in the Writable instance", function (done) {
+    // it("should allow type definitions to be set on nested positions in the Writable instance", function (done) {
     //     // root obj (being modified as mutable)
     //     const obj = { a: {} };
     //     // create a new instance...
@@ -567,7 +567,7 @@ describe("Writable ~ from ~ freo", function () {
     //     done();
     // });
 
-    // it("should allow type defintions to be deleted from nested positions in the Writable instance", function (done) {
+    // it("should allow type definitions to be deleted from nested positions in the Writable instance", function (done) {
     //     // root obj 
     //     const obj = { a: {} };
     //     // create a new instance...
@@ -595,7 +595,7 @@ describe("Writable ~ from ~ freo", function () {
     //     done();
     // });
 
-    // it("should allow type defintions to be set on the root of the Writable instance as shorthand alias'", function (done) {
+    // it("should allow type definitions to be set on the root of the Writable instance as shorthand alias'", function (done) {
     //     // root obj 
     //     const obj = {};
     //     // create a new instance...
@@ -633,7 +633,7 @@ describe("Writable ~ from ~ freo", function () {
     //     done();
     // });
 
-    // it("should allow type defintions to be set on the root of the Writable instance as a method", function (done) {
+    // it("should allow type definitions to be set on the root of the Writable instance as a method", function (done) {
     //     // root obj 
     //     const obj = "string";
     //     // create a new instance...
@@ -656,7 +656,7 @@ describe("Writable ~ from ~ freo", function () {
     //     done();
     // });
 
-    // it("should allow type defintions to be removed after being added using returned method", function (done) {
+    // it("should allow type definitions to be removed after being added using returned method", function (done) {
     //     // root obj 
     //     const obj = "string";
     //     // check for the type being dropped
@@ -850,7 +850,7 @@ describe("Writable ~ from ~ freo", function () {
     //     done();
     // });
 
-    // it("should allow type defintions to be set on the Writable instance to cover multiple positions", function (done) {
+    // it("should allow type definitions to be set on the Writable instance to cover multiple positions", function (done) {
     //     // root obj 
     //     const obj = [{}, { b: [{ c: [{ d: 1 }, { d: 2 }, { d: 3 }] }, { c: [{ d: 4 }, { d: 5 }] }] }];
     //     // create a new instance...

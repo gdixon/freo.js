@@ -54,7 +54,7 @@ const types = {
 // slightly more complex routes construct - using _route as { options.definition }
 const routes = {
     "_route": {
-        "fn": () => {
+        "test": () => {
 
             return -1
         },
@@ -62,7 +62,7 @@ const routes = {
     },
     "0": {
         "_route": {
-            "fn": () => {
+            "test": () => {
 
                 return 0
             }
@@ -245,7 +245,7 @@ const options = {
     // where is the definition located in the structure
     definition: "_route",
     // how should the keys be parsed and represented
-    deliminator: "/"
+    delimiter: "/"
 };
 
 // set-up spec testing feature-set
@@ -261,9 +261,9 @@ describe("hasDefinition ~ from ~ freo/utility", function () {
         // should have discovered correct matching _type
         chai.expect(type1.keys[0]).to.equal("0.a");
         // check the definition was recorded correctly
-        chai.expect(type1.defintions[type1.keys[0]]()).to.equal(0);
+        chai.expect(type1.definitions[type1.keys[0]]()).to.equal(0);
         // check the definition was recorded correctly
-        chai.expect(type1.defintions[type1.keys[1]]()).to.equal(2);
+        chai.expect(type1.definitions[type1.keys[1]]()).to.equal(2);
         // if we call to args with the matched key we can gather the matches details/arguments
         chai.expect(type1.args(type1.keys[0])).to.eql(['0', 'a']);
         // if we call to args with the matched key we can gather the matches details/arguments
@@ -273,16 +273,16 @@ describe("hasDefinition ~ from ~ freo/utility", function () {
     });
 
     it("should discover _type given a key which matches on an options wildcard and a greedy wildcard", function (done) {
-        // setup hasDefinition to work on types (default functionality - { definition: "_type", deliminator: "." })
+        // setup hasDefinition to work on types (default functionality - { definition: "_type", delimiter: "." })
         const type2 = hasDefinition(types, "0.b");
         // expect 2 to matches
         chai.expect(type2.keys.length).to.equal(2);
         // expect the matches to have been ordered correctly
         chai.expect(type2.keys).to.eql(["0.b|c", "0.**"]);
         // check the definition was recorded correctly
-        chai.expect(type2.defintions[type2.keys[0]]()).to.equal(1);
+        chai.expect(type2.definitions[type2.keys[0]]()).to.equal(1);
         // check the definition was recorded correctly
-        chai.expect(type2.defintions[type2.keys[1]]()).to.equal(2);
+        chai.expect(type2.definitions[type2.keys[1]]()).to.equal(2);
         // if we call to args with the matched key we can gather the matches details/arguments
         chai.expect(type2.args(type2.keys[0])).to.eql(['0', 'b']);
         // expect the same breakdown for greedy wildcard too
@@ -296,8 +296,8 @@ describe("hasDefinition ~ from ~ freo/utility", function () {
         const type3 = hasDefinition(types, "0.d.d.d.d");
         // expect 1 match
         chai.expect(type3.keys.length).to.equal(1);
-        // check that the defintions were ordered correctly
-        chai.expect(type3.defintions[type3.keys[0]]()).to.equal(2);
+        // check that the definitions were ordered correctly
+        chai.expect(type3.definitions[type3.keys[0]]()).to.equal(2);
         // if we call to args with the matched key we can gather the matches details
         chai.expect(type3.args(type3.keys[0])).to.eql(['0', 'd.d.d.d']);
 
@@ -309,8 +309,8 @@ describe("hasDefinition ~ from ~ freo/utility", function () {
         const type4 = hasDefinition(types, "1");
         // expect no matches
         chai.expect(type4.keys.length).to.equal(1);
-        // check that the defintions were ordered correctly
-        chai.expect(type4.defintions[type4.keys[0]]()).to.equal(3);
+        // check that the definitions were ordered correctly
+        chai.expect(type4.definitions[type4.keys[0]]()).to.equal(3);
         // if we call to args with the matched key we can gather the matches details
         chai.expect(type4.args(type4.keys[0])).to.eql(['1']);
 
@@ -334,7 +334,7 @@ describe("hasDefinition ~ from ~ freo/utility", function () {
         // expect 1 matches
         chai.expect(type6.keys.length).to.equal(1);
         // expect to only match on the full wildcard route
-        chai.expect(type6.defintions[type6.keys[0]]()).to.equal(-1);
+        chai.expect(type6.definitions[type6.keys[0]]()).to.equal(-1);
         // if we call to args with the matched key we can gather the matches details
         chai.expect(type6.args(type6.keys[0])).to.eql([""]);
 
@@ -366,15 +366,15 @@ describe("hasDefinition ~ from ~ freo/utility", function () {
         // expect 6 matches
         chai.expect(route1.keys.length).to.equal(6);
         // console.log(route1);
-        // console.log(route1.keys.map((key) => route1.defintions[key]()));
+        // console.log(route1.keys.map((key) => route1.definitions[key]()));
         // console.log(route1.keys.map((key) => route1.args(key)));
-        // check that the defintions were ordered correctly
-        chai.expect(route1.defintions[route1.keys[0]]()).to.equal(1);
-        chai.expect(route1.defintions[route1.keys[1]]()).to.equal(2);
-        chai.expect(route1.defintions[route1.keys[2]]()).to.equal(3);
-        chai.expect(route1.defintions[route1.keys[3]]()).to.equal(4);
-        chai.expect(route1.defintions[route1.keys[4]]()).to.equal(5);
-        chai.expect(route1.defintions[route1.keys[5]]()).to.equal(7);
+        // check that the definitions were ordered correctly
+        chai.expect(route1.definitions[route1.keys[0]]()).to.equal(1);
+        chai.expect(route1.definitions[route1.keys[1]]()).to.equal(2);
+        chai.expect(route1.definitions[route1.keys[2]]()).to.equal(3);
+        chai.expect(route1.definitions[route1.keys[3]]()).to.equal(4);
+        chai.expect(route1.definitions[route1.keys[4]]()).to.equal(5);
+        chai.expect(route1.definitions[route1.keys[5]]()).to.equal(7);
         // if we call to args with the matched key we can gather the matches details
         chai.expect(route1.args(route1.keys[0])).to.eql(['0', 'a', '1', 'b', '0', 'c', '0', 'd', 'e']);
         chai.expect(route1.args(route1.keys[1])).to.eql(['0', 'a', '1', 'b', '0', 'c', '0', 'd', 'e']);
@@ -393,7 +393,7 @@ describe("hasDefinition ~ from ~ freo/utility", function () {
         // expect 2 matches
         chai.expect(route2.keys.length).to.equal(2);
         // expect to only match on the full wildcard route
-        chai.expect(route2.defintions[route2.keys[0]]()).to.equal(5);
+        chai.expect(route2.definitions[route2.keys[0]]()).to.equal(5);
 
         done();
     });
@@ -404,7 +404,7 @@ describe("hasDefinition ~ from ~ freo/utility", function () {
         // expect 1 matches
         chai.expect(route3.keys.length).to.equal(1);
         // expect to only match on the full wildcard route
-        chai.expect(route3.defintions[route3.keys[0]]()).to.equal(0);
+        chai.expect(route3.definitions[route3.keys[0]].test()).to.equal(0);
 
         done();
     });
@@ -424,7 +424,7 @@ describe("hasDefinition ~ from ~ freo/utility", function () {
         // expect 2 matches
         chai.expect(route5.keys.length).to.equal(2);
         // expect to only match on the full wildcard route **/f or 4/**/f
-        chai.expect(route5.defintions[route5.keys[0]]()).to.equal(10);
+        chai.expect(route5.definitions[route5.keys[0]]()).to.equal(10);
         // if we call to args with the matched key we can gather the matches details
         chai.expect(route5.args(route5.keys[0])).to.eql(['4', '10/s/d/h', 'f']);
 
@@ -437,7 +437,7 @@ describe("hasDefinition ~ from ~ freo/utility", function () {
         // expect 4 matches
         chai.expect(route6.keys.length).to.equal(4);
         // expect to only match on the full wildcard route
-        chai.expect(route6.defintions[route6.keys[0]]()).to.equal(11);
+        chai.expect(route6.definitions[route6.keys[0]]()).to.equal(11);
         // if we call to args with the matched key we can gather the matches details
         chai.expect(route6.args(route6.keys[0])).to.eql(['4', '10/s/d/h', 'e', 'f']);
         // if we call to args with the matched key we can gather the matches details
@@ -456,7 +456,7 @@ describe("hasDefinition ~ from ~ freo/utility", function () {
         // expect 1 matches
         chai.expect(route7.keys.length).to.equal(1);
         // expect to only match on the full wildcard route
-        chai.expect(route7.defintions[route7.keys[0]]()).to.equal(-1);
+        chai.expect(route7.definitions[route7.keys[0]].test()).to.equal(-1);
         // if we call to args with the matched key we can gather the matches details
         chai.expect(route7.args(route7.keys[0])).to.eql([""]);
 
@@ -469,7 +469,7 @@ describe("hasDefinition ~ from ~ freo/utility", function () {
         // expecting 5 matches (* note that **/e/f/**/e/* matches first because it is longer and contains more details)
         chai.expect(route8.keys).to.eql(['**/e/f/**/e/*', '4/**/e/**', '4/**/f', '**/e/f', '**/f']);
         // expect to only match on the full wildcard route
-        chai.expect(route8.defintions[route8.keys[0]]()).to.equal(9);
+        chai.expect(route8.definitions[route8.keys[0]]()).to.equal(9);
         // check the first - "**/e/f/**/e/*"
         chai.expect(route8.args(route8.keys[0])).to.eql([
             "4/10/s/d/h",
@@ -513,7 +513,7 @@ describe("hasDefinition ~ from ~ freo/utility", function () {
         // expect 1 matches
         chai.expect(route9.keys.length).to.equal(1);
         // expect to only match on the full wildcard route
-        chai.expect(route9.defintions[route9.keys[0]]()).to.equal(12);
+        chai.expect(route9.definitions[route9.keys[0]]()).to.equal(12);
         // check the match fits - "4/**/d/a|b"
         chai.expect(route9.args(route9.keys[0])).to.eql([
             "4",
@@ -525,7 +525,7 @@ describe("hasDefinition ~ from ~ freo/utility", function () {
         done();
     });
 
-    it("should fail gracefully and return false on args if uri doesnt match any defintions", function (done) {
+    it("should fail gracefully and return false on args if uri doesnt match any definitions", function (done) {
         // expect to miss if the URI doesnt fit available routes
         const route10 = hasDefinition(routes, "0/c", options);
         // expect 0 matches

@@ -8,9 +8,9 @@ import { toArray } from "../../src/internal/utility/toArray.js";
 describe("toArray ~ from ~ freo/utility", function () {
 
     it("should return array when passed a deliminated string", function (done) {
-        // default deliminator is a single dot (.)
+        // default delimiter is a single dot (.)
         chai.expect(toArray("test.string.delimination")).to.eql(["test", "string", "delimination"]);
-        // deliminator can be provided as second arg
+        // delimiter can be provided as second arg
         chai.expect(toArray("test-string-delimination", "-")).to.eql(["test", "string", "delimination"]);
         // will expand braces and explode as if they were deliminated
         chai.expect(toArray("[test][string][delimination]")).to.eql(["test", "string", "delimination"]);
@@ -56,7 +56,7 @@ describe("toArray ~ from ~ freo/utility", function () {
         
     });
 
-    it("should return array holding response of .toString (split using deliminator)", function (done) {
+    it("should return array holding response of .toString (split using delimiter)", function (done) {
         // check with object and split .toString response
         chai.expect(toArray({"a": 1}, " ")).to.eql(["object", "Object"]);
         // check with date object split by space
